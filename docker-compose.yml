@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  ch01:
+    image: yandex/clickhouse-server:21.7.3-alpine
+    container_name: ch01
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    ports:
+      - 8123:8123
+      - 9000:9000
+      - 9004:9004
+      - 9005:9005
+    volumes:
+      - chdata:/var/lib/clickhouse
+volumes:
+  chdata:
