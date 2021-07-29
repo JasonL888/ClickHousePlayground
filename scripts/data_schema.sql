@@ -1,9 +1,9 @@
 
 -- clickhouse-client --multiline
-CREATE DATABASE IF NOT EXISTS cpe;
+--CREATE DATABASE IF NOT EXISTS cpe;
 
-SET input_format_import_nested_json=1;
-SET flatten_nested = 1;
+--SET input_format_import_nested_json=1;
+--SET flatten_nested = 1;
 CREATE TABLE cpe.kpi
 (
   EventDate Date,
