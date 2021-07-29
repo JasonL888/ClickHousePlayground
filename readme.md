@@ -139,6 +139,46 @@ INSERT into cpe.kpi FORMAT JSONEachRow {"EventDate": "2021-06-28", "EventDateTim
 select * from cpe.kpi;
 ```
 
+## Setup Grafana Plugin for ClickHouse
+* install plugin (one-time only) in container gf01
+```
+docker exec -it gf01 bash
+grafana-cli plugins install vertamedia-clickhouse-datasource
+```
+* restart grafana
+  * shutdown per [Shut down](#shut-down)
+  * startup per [Start Up](#start-up)
+
+* Access grafana
+  * on browser, navigate to http://localhost:3000
+  * on first login, set the password for "admin"
+
+* Add Datasource
+  * Click on "Add Datasource"
+  * Search and Select  "ClickHouse"
+  * On "Data Sources/ ClickHouse" page
+    * set URL to "http://ch01:8123"
+    * scroll down, click "Save & Test"
+      * should see message "Data source is working"
+
+* Create Dashboard
+  * Add Panel
+    * Stat
+    ```
+    SELECT COUNT(DISTINCT SerialNumber) FROM cpe.kpi
+    ```
+    * Table
+    ```
+    SELECT DISTINCT SerialNumber FROM cpe.kpi  
+    ```
+    * Time-series
+    ```
+    SELECT $timeSeries as t, MemoryStatus_Free, MemoryStatus_Total
+    FROM $table
+    WHERE $timeFilter AND SerialNumber = 'VDLINNNE1808028885'
+    ORDER BY t
+    ```
+
 ## Shut Down
 ```
 docker-compose down

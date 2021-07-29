@@ -14,5 +14,13 @@ services:
       - 9005:9005
     volumes:
       - chdata:/var/lib/clickhouse
+  gf01:
+    image: grafana/grafana:8.0.5
+    container_name: gf01
+    ports:
+      - 3000:3000
+    volumes:
+      - gfdata:/var/lib/grafana
 volumes:
   chdata:
+  gfdata:
