@@ -1,5 +1,5 @@
 from clickhouse_driver import Client
-from mock_data_gen import CPE
+from CPE import CPE
 
 class ClickHouseConnection:
 	def __init__(self):
@@ -9,8 +9,6 @@ class ClickHouseConnection:
 		result = self.execute('SET input_format_import_nested_json=1')
 		print("RESULT: {0}: {1}".format(type(result),result))
 		result = self.execute('SET flatten_nested = 1')
-		print("RESULT: {0}: {1}".format(type(result),result))
-		result = self.execute('DROP DATABASE cpe')
 		print("RESULT: {0}: {1}".format(type(result),result))
 		result = self.execute('CREATE DATABASE IF NOT EXISTS cpe')
 		print("RESULT: {0}: {1}".format(type(result),result))

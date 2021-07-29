@@ -10,14 +10,14 @@ Playground with Clickhouse in docker container
 python script\mock_data_gen.py
 ```
 
-
-# Start Up
+# Usage
+## Start Up
 In the folder with docker-compose.yml,
 ```
 docker-compose up
 ```
 
-# Setup Clickhouse schema
+## Setup Clickhouse schema
 Access bash on container "ch01"
 ```
 docker exec -it ch01 bash
@@ -58,48 +58,7 @@ CREATE TABLE cpe.kpi
   MemoryStatus_Free UInt16, --27424
   MemoryStatus_Total UInt16, -- 53528
   UpTime UInt16,
---  HostNumberOfEntries UInt8,
---  Hosts Nested (
---    ID UInt8,
---    Active UInt8,
---    HostName String,
---    IPAddress String,
---    Layer1Interface String, -- Device.Ethernet.Interface.1
---    Layer3Interface String, -- Device.IP.Interface.1
---    PhyAddress String
---  ),
---  Ethernet_InterfaceNumberOfEntries UInt8,
---  Ethernet_Interface Nested (
---    ID UInt8,
---    Name String, -- "eth0.2"
---    Enable UInt8,
---    MACAddress String,
---    Status UInt8,
---    BytesSent UInt64, -- Stats.BytesSent
---    BytesReceived UInt64,
---    DiscardPacketsReceived UInt32,
---    DiscardPacketsSent UInt32,
---    ErrorsReceived UInt32,
---    ErrorsSent UInt32,
---    PacketsReceived UInt64,
---    PacketsSent UInt64
---  ),
---  IP_InterfaceNumberOfEntries UInt8,
---  IP_Interface Nested (
---    ID UInt8,
---    Name String,
---    Enable UInt8,
---    LowerLayers String, -- Device.Ethernet.Link.1
---    Status UInt8, -- Up
---    BytesSent UInt64, -- Stats.BytesSent
---    BytesReceived UInt64,
---    DiscardPacketsReceived UInt32,
---    DiscardPacketsSent UInt32,
---    ErrorsReceived UInt32,
---    ErrorsSent UInt32,
---    PacketsReceived UInt64,
---    PacketsSent UInt64
---  ),
+
   WiFi_AccessPointNumberOfEntries UInt8,
   WiFi_AccessPoint Nested (
     ID UInt8,
@@ -161,7 +120,67 @@ INSERT into cpe.kpi FORMAT JSONEachRow {"EventDate": "2021-06-28", "EventDateTim
 select * from cpe.kpi;
 ```
 
-# Shut Down
+## Shut Down
 ```
 docker-compose down
+```
+
+## Using script to populate
+* create python environment
+```
+cd scripts
+python3 -m venv venv
+```
+
+* activate virtual environment
+```
+. ./venv/bin/activate
+```
+
+* install clickhouse_driver
+```
+pip install clickhouse_driver
+```
+
+* run script to import (within activated virtual env)
+```
+python import_mock_data.py
+```
+
+# Miscellaneous
+## Disk size
+* initial without cpe.kpi database table
+
+```
+docker exec -it ch01 bash
+bash-5.1# du -sh .
+261.2M
+```
+* after running import script
+  * note: have to wait for while as ClickHouse merge/persist
+  * approx. (573.3- 261.2)/5000 ~= 0.06242 MB/record ~ 65 KB/rec 
+
+```
+bash-5.1# clickhouse-client
+ClickHouse client version 21.7.3.14 (official build).
+Connecting to localhost:9000 as user default.
+Connected to ClickHouse server version 21.7.3 revision 54449.
+53e61cd66e97 :) select count(*) from cpe.kpi;
+
+SELECT count(*)
+FROM cpe.kpi
+
+Query id: ebe26be8-63df-41dc-b856-4c7b9a19f3e7
+
+┌─count()─┐
+│    5000 │
+└─────────┘
+
+1 rows in set. Elapsed: 0.013 sec.
+
+53e61cd66e97 :) quit
+Bye.
+bash-5.1# cd /var/lib/clickhouse/
+bash-5.1# du -sh .
+573.3M	.
 ```
