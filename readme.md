@@ -13,7 +13,30 @@ In the folder with docker-compose.yml,
 docker-compose up
 ```
 
-## Setup Clickhouse schema
+## Populate ClickHouse DB
+### Method 1: Using script to populate
+* create python environment
+```
+cd scripts
+python3 -m venv venv
+```
+
+* activate virtual environment
+```
+. ./venv/bin/activate
+```
+
+* install clickhouse_driver
+```
+pip install clickhouse_driver
+```
+
+* run script to import (within activated virtual env)
+```
+python import_mock_data.py
+```
+
+### Method 2: Manual Setup Clickhouse schema
 Access bash on container "ch01"
 ```
 docker exec -it ch01 bash
@@ -119,28 +142,6 @@ select * from cpe.kpi;
 ## Shut Down
 ```
 docker-compose down
-```
-
-## Using script to populate
-* create python environment
-```
-cd scripts
-python3 -m venv venv
-```
-
-* activate virtual environment
-```
-. ./venv/bin/activate
-```
-
-* install clickhouse_driver
-```
-pip install clickhouse_driver
-```
-
-* run script to import (within activated virtual env)
-```
-python import_mock_data.py
 ```
 
 # Miscellaneous
