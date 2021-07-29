@@ -5,10 +5,6 @@ Playground with Clickhouse in docker container
 # Pre-requisite
 * Docker desktop installed
 * Python3 installed
-* (Optional) Run script to generate mock data
-```
-python script\mock_data_gen.py
-```
 
 # Usage
 ## Start Up
@@ -158,7 +154,7 @@ bash-5.1# du -sh .
 ```
 * after running import script
   * note: have to wait for while as ClickHouse merge/persist
-  * approx. (573.3- 261.2)/5000 ~= 0.06242 MB/record ~ 65 KB/rec 
+  * approx. (268.4- 261.2)/5000 ~= 0.00144 MB/record ~ 1.44 KB/rec
 
 ```
 bash-5.1# clickhouse-client
@@ -182,5 +178,5 @@ Query id: ebe26be8-63df-41dc-b856-4c7b9a19f3e7
 Bye.
 bash-5.1# cd /var/lib/clickhouse/
 bash-5.1# du -sh .
-573.3M	.
+268.4M	.
 ```
