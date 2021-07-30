@@ -127,17 +127,17 @@ class CPE:
 	def updateUpTime(self):
 		self.UpTime = self.UpTime + (periodicInterval * 60)
 	def updateNetworkStats(self):
-		for i in range(0, self.WiFi_SSIDNumberOfEntries -1 ):
+		for i in range(0, self.WiFi_SSIDNumberOfEntries):
 			Discard = gauss(0,2)
 			Errors = gauss(0,2)
-			self.WiFi_SSID['BytesSent'][i] = self.WiFi_SSID['BytesSent'][i] + int(gauss(80000,8000))
-			self.WiFi_SSID['BytesReceived'][i] = self.WiFi_SSID['BytesReceived'][i] + int(gauss(80000,8000))
+			self.WiFi_SSID['BytesSent'][i] = self.WiFi_SSID['BytesSent'][i] + abs(int(gauss(80000,8000)))
+			self.WiFi_SSID['BytesReceived'][i] = self.WiFi_SSID['BytesReceived'][i] + abs(int(gauss(80000,8000)))
 			self.WiFi_SSID['DiscardPacketsReceived'][i] = self.WiFi_SSID['DiscardPacketsReceived'][i] + int(Discard if Discard > 0 else 0)
 			self.WiFi_SSID['DiscardPacketsSent'][i] = self.WiFi_SSID['DiscardPacketsSent'][i] + int(Discard if Discard > 0 else 0)
 			self.WiFi_SSID['ErrorsReceived'][i] = self.WiFi_SSID['ErrorsReceived'][i] + int(Errors if Errors > 0 else 0)
 			self.WiFi_SSID['ErrorsSent'][i] = self.WiFi_SSID['ErrorsSent'][i] + int(Errors if Errors > 0 else 0)
-			self.WiFi_SSID['PacketsReceived'][i] = self.WiFi_SSID['PacketsReceived'][i] + int(gauss(100,10))
-			self.WiFi_SSID['PacketsSent'][i] = self.WiFi_SSID['PacketsSent'][i] + int(gauss(100,10))
+			self.WiFi_SSID['PacketsReceived'][i] = self.WiFi_SSID['PacketsReceived'][i] + abs(int(gauss(100,10)))
+			self.WiFi_SSID['PacketsSent'][i] = self.WiFi_SSID['PacketsSent'][i] + abs(int(gauss(100,10)))
 
 #    def _genHostEntries(self):
 #        self.Hosts = []
